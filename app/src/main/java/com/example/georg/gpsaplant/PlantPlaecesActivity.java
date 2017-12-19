@@ -1,5 +1,6 @@
 package com.example.georg.gpsaplant;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,10 +26,25 @@ abstract class PlantPlaecesActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.capturecolor) {
+            Intent searchbyColorIntent=new Intent(this,ColorCaptureActivity.class);
+            startActivity(searchbyColorIntent);
+        }else if(id==R.id.gpsaplant){
+            Intent gpsAPlantIntent=new Intent(this,GPSAplant.class);
+            startActivity(gpsAPlantIntent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+   public void gpsAPlantClicked(MenuItem item){
+       Intent gpsAPlantIntent=new Intent(this,GPSAplant.class);
+       startActivity(gpsAPlantIntent);
+
+    }
+    public void searchByColorClicked(Menu item){
+        Intent searchbyColorIntent=new Intent(this,ColorCaptureActivity.class);
+        startActivity(searchbyColorIntent);
+
     }
 }
