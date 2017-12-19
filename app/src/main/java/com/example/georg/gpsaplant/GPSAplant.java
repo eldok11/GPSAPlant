@@ -18,15 +18,22 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationServices;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class GPSAplant extends PlantPlaecesActivity {
+public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
 
     public static final int CAMERA_REQUEST = 10;
     private AutoCompleteTextView actPlantName;
     private ImageView imgSpecimenPhoto;
+    private FusedLocationProviderApi locationProvider= LocationServices.FusedLocationApi;
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,9 @@ public class GPSAplant extends PlantPlaecesActivity {
         setSupportActionBar(toolbar);
         actPlantName = findViewById(R.id.actPlantName);
         imgSpecimenPhoto = findViewById(R.id.imageSpecimenPhoto);
+
+        //for gpslocation, need to implementgoogleapiclient.connectioncallbacks and googleapiclient.onconnetionfailedlistener
+        googleApiClient=new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
 
 
     }
@@ -86,5 +96,24 @@ public class GPSAplant extends PlantPlaecesActivity {
     @Override
     public int getCurrentMenuId() {
         return R.id.gpsaplant;
+    }
+
+
+    /*
+    3 methods implemented for gpslocation
+     */
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 }
