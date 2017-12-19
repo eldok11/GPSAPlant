@@ -118,12 +118,12 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
     //called, when we have required a gps signal from somewhere
     @Override
     public void onConnected(Bundle bundle) {
-        rquestLocationUpdates();
+        requestLocationUpdates();
 
 
     }
 // google api , locationrequest und locationlisteneer, die wir gemacht haben werden jetzt gebraucht
-    private void rquestLocationUpdates() {
+    private void requestLocationUpdates() {
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest,this);
     }
 
@@ -137,9 +137,38 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
 
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+   //we are going inviseble, safe energy
+    @Override
+    protected void onStop() {
+        super.onStop();
+        googleApiClient.disconnect();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(googleApiClient.isConnected()){
+            requestLocationUpdates();
+            //if not connected, it will connect onconnected method we did above
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,this);
+    }
+
     //implement locationlistener, will be called, when we get new gsp location, careful to implement the right interface!
     @Override
     public void onLocationChanged(Location location) {
+        Toast.makeText(this,"location changed: "+location.getLatitude()+" "+location.getLongitude(),Toast.LENGTH_LONG).show();
 
     }
 }
