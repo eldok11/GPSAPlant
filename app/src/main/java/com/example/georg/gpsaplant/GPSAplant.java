@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +41,10 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
     private LocationRequest locationRequest;
     private final static int MILLISECONDS_PER_SECOND=1000;
     public final static int MINUTE=60* MILLISECONDS_PER_SECOND; //frequency of gsp request update
+    private double longitude;
+    private double latitude;
+    private TextView lblLongtitudeValue;
+    private TextView lblLangtitudeValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,8 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
         setSupportActionBar(toolbar);
         actPlantName = findViewById(R.id.actPlantName);
         imgSpecimenPhoto = findViewById(R.id.imageSpecimenPhoto);
+        lblLongtitudeValue = findViewById(R.id.lblLongtitudeValue);
+        lblLangtitudeValue = findViewById(R.id.lblLatitudeValue);
 
         //for gpslocation, need to implementgoogleapiclient.connectioncallbacks and googleapiclient.onconnetionfailedlistener , tell us if connection suspended or fail
         googleApiClient=new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
@@ -168,7 +175,11 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
     //implement locationlistener, will be called, when we get new gsp location, careful to implement the right interface!
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(this,"location changed: "+location.getLatitude()+" "+location.getLongitude(),Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"location changed: "+location.getLatitude()+" "+location.getLongitude(),Toast.LENGTH_LONG).show();
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+        lblLangtitudeValue.setText(Double.toString(longitude));
+        lblLongtitudeValue.setText(Double.toString(latitude));
 
     }
 }
