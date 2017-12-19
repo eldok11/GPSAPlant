@@ -3,6 +3,7 @@ package com.example.georg.gpsaplant;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Camera;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,19 +22,24 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener {
+public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
     public static final int CAMERA_REQUEST = 10;
     private AutoCompleteTextView actPlantName;
     private ImageView imgSpecimenPhoto;
     private FusedLocationProviderApi locationProvider= LocationServices.FusedLocationApi;
     private GoogleApiClient googleApiClient;
+    private LocationRequest locationRequest;
+    private final static int MILLISECONDS_PER_SECOND=1000;
+    public final static int MINUTE=60* MILLISECONDS_PER_SECOND; //frequency of gsp request update
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +50,17 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
         actPlantName = findViewById(R.id.actPlantName);
         imgSpecimenPhoto = findViewById(R.id.imageSpecimenPhoto);
 
-        //for gpslocation, need to implementgoogleapiclient.connectioncallbacks and googleapiclient.onconnetionfailedlistener
+        //for gpslocation, need to implementgoogleapiclient.connectioncallbacks and googleapiclient.onconnetionfailedlistener , tell us if connection suspended or fail
         googleApiClient=new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
 
-
+    //initialize the location request with the acuracy and frequence in whic we want gps updates
+        locationRequest=new LocationRequest();
+        //I will request update every minute
+        locationRequest.setInterval(MINUTE);
+        //I will see any other application update it all 15 second
+        locationRequest.setFastestInterval(15*MILLISECONDS_PER_SECOND);
+        //wie genau soll location seit, wegen energiebedarf
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     public void btnPauseGPSClicked(View view) {
@@ -102,9 +115,16 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
     /*
     3 methods implemented for gpslocation
      */
+    //called, when we have required a gps signal from somewhere
     @Override
     public void onConnected(Bundle bundle) {
+        rquestLocationUpdates();
 
+
+    }
+// google api , locationrequest und locationlisteneer, die wir gemacht haben werden jetzt gebraucht
+    private void rquestLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient,locationRequest,this);
     }
 
     @Override
@@ -114,6 +134,12 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    //implement locationlistener, will be called, when we get new gsp location, careful to implement the right interface!
+    @Override
+    public void onLocationChanged(Location location) {
 
     }
 }
