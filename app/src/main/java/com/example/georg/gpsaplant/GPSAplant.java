@@ -22,7 +22,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class GPSAplant extends AppCompatActivity {
+public class GPSAplant extends PlantPlaecesActivity {
 
     public static final int CAMERA_REQUEST = 10;
     private AutoCompleteTextView actPlantName;
@@ -38,28 +38,6 @@ public class GPSAplant extends AppCompatActivity {
         imgSpecimenPhoto = findViewById(R.id.imageSpecimenPhoto);
 
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_gpsaplant, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void btnPauseGPSClicked(View view) {
