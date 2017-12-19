@@ -13,4 +13,7 @@
     <string name="btnShowSaved">Show Saved</string>
     <string name="lblTakePhoto">Take Photo</string>
     <string name="lblSave">Save</string>
+    <string name="title_activity_color_capture">ColorCaptureActivity</string>
+    <string name="lblTakeNewPhoto">Take New Photo</string>
+    <string name="lblOpenExistingImage">Open existing image</string>
 </resources>
