@@ -82,4 +82,9 @@ public class GPSAplant extends PlantPlaecesActivity {
             }
         }
     }
+    //für plantplacesactivity, um zu erkennen, wo wir uns gerade befinden und was somit aus der menubar entfernt werden sollte
+    @Override
+    public int getCurrentMenuId() {
+        return R.id.gpsaplant;
+    }
 }

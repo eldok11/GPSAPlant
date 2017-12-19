@@ -15,6 +15,11 @@ abstract class PlantPlaecesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_gpsaplant, menu);
+        int currentMenuId = getCurrentMenuId();
+        //wenn wir eine ID habe, entferne von unserem menu
+        if(getCurrentMenuId()!=0){
+            menu.removeItem(currentMenuId);
+        }
         return true;
     }
 
@@ -37,14 +42,6 @@ abstract class PlantPlaecesActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-   public void gpsAPlantClicked(MenuItem item){
-       Intent gpsAPlantIntent=new Intent(this,GPSAplant.class);
-       startActivity(gpsAPlantIntent);
+    public abstract int getCurrentMenuId();
 
-    }
-    public void searchByColorClicked(Menu item){
-        Intent searchbyColorIntent=new Intent(this,ColorCaptureActivity.class);
-        startActivity(searchbyColorIntent);
-
-    }
 }

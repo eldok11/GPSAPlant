@@ -22,4 +22,8 @@ public class ColorCaptureActivity extends PlantPlaecesActivity {
     }
 
 
+    @Override
+    public int getCurrentMenuId() {
+        return R.id.capturecolor;
+    }
 }
