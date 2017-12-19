@@ -2,7 +2,10 @@ package com.example.georg.gpsaplant;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +17,10 @@ import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GPSAplant extends AppCompatActivity {
 
@@ -66,8 +73,22 @@ public class GPSAplant extends AppCompatActivity {
 
     public void btnTakePhotoClicked(View view) {
         Intent cameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+        File pictureDirectory=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        String pictureName=getPictureName();
+        File imageFile=new File(pictureDirectory,pictureName);
+        Uri pictureUri=Uri.fromFile(imageFile);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,pictureUri);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
         
+    }
+
+    private String getPictureName() {
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyMMdd_HHmmss");
+        String timestamp=sdf.format(new Date());
+        return "plantPlacesImage"+timestamp+".jpg";
+
     }
     //wenn wir staractivityforresult aufrufen, brauchen wir onactivityResult
 
@@ -76,8 +97,8 @@ public class GPSAplant extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
             if(requestCode==CAMERA_REQUEST){
-                Bitmap cameraImage = (Bitmap)data.getExtras().get("data");
-                imgSpecimenPhoto.setImageBitmap(cameraImage);
+                //Bitmap cameraImage = (Bitmap)data.getExtras().get("data");
+                //imgSpecimenPhoto.setImageBitmap(cameraImage);
 
 
             }
