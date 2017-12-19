@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
+import android.os.Parcelable;
 import android.widget.Toast;
 
 public class SynchronizeBroadcastReceiver extends BroadcastReceiver {
@@ -26,7 +28,19 @@ public class SynchronizeBroadcastReceiver extends BroadcastReceiver {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo=connectivityManager.getActiveNetworkInfo();
         if(activeNetworkInfo!=null&&activeNetworkInfo.getType()==ConnectivityManager.TYPE_WIFI){
-            wifi=true;
+            NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+            NetworkInfo.DetailedState detailedState = networkInfo.getDetailedState();
+            if(detailedState== NetworkInfo.DetailedState.CONNECTED){
+                wifi=true;
+            }else if(detailedState== NetworkInfo.DetailedState.DISCONNECTED||detailedState== NetworkInfo.DetailedState.DISCONNECTING){
+                pauseActiveProccess();
+
+            }
+
+            else{
+                wifi=false;
+            }
+
         }else{
             wifi=false;
         }
@@ -39,6 +53,10 @@ public class SynchronizeBroadcastReceiver extends BroadcastReceiver {
         if(wifi){
             download(context);
         }
+    }
+
+    private void pauseActiveProccess() {
+
     }
 
     private void download(Context context) {
