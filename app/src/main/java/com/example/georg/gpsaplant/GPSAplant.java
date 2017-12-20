@@ -16,12 +16,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -45,6 +48,8 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
     private double latitude;
     private TextView lblLongtitudeValue;
     private TextView lblLangtitudeValue;
+    private boolean paused=false;
+    private Button btnPause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +73,25 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
         locationRequest.setFastestInterval(15*MILLISECONDS_PER_SECOND);
         //wie genau soll location seit, wegen energiebedarf
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+
+        btnPause = findViewById(R.id.buttonPause);
     }
 
     public void btnPauseGPSClicked(View view) {
-        Toast.makeText(this,"button clicked",Toast.LENGTH_LONG).show();
+
+        if(paused==false) {
+            pauseGPS();
+            paused = true;
+            Toast.makeText(this,"paused",Toast.LENGTH_LONG).show();
+            btnPause.setText(R.string.lblGPResume);
+        }else{
+            resumeGPS();
+            paused=false;
+            Toast.makeText(this,"resumed",Toast.LENGTH_LONG).show();
+            btnPause.setText(R.string.lblGPSpause);
+
+        }
     }
 
     public void btnShowSavedClicked(View v){
@@ -160,6 +180,10 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
     @Override
     protected void onResume() {
         super.onResume();
+        resumeGPS();
+    }
+
+    private void resumeGPS() {
         if(googleApiClient.isConnected()){
             requestLocationUpdates();
             //if not connected, it will connect onconnected method we did above
@@ -169,7 +193,11 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
     @Override
     protected void onPause() {
         super.onPause();
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,this);
+        pauseGPS();
+    }
+
+    private PendingResult<Status> pauseGPS() {
+        return LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient,this);
     }
 
     //implement locationlistener, will be called, when we get new gsp location, careful to implement the right interface!
@@ -180,6 +208,7 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
         latitude = location.getLatitude();
         lblLangtitudeValue.setText(Double.toString(longitude));
         lblLongtitudeValue.setText(Double.toString(latitude));
+
 
     }
 }

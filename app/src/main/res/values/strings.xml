@@ -4,6 +4,7 @@
 
     <string name="lblLatitude">Latitude</string>
     <string name="lblGPSpause">GPS Pause</string>
+    <string name="lblGPResume">GPS Resume</string>
     <string name="lblLongtitude">Longtitude</string>
     <string name="lblZero">0.0</string>
     <string name="lblGPSAge">GPS Age</string>
