@@ -1,26 +1,24 @@
 package com.example.georg.gpsaplant;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Camera;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.georg.DAO.IPlantDAO;
+import com.example.georg.DAO.PlantDAOStub;
+import com.example.georg.DTO.PlantDTO;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -33,6 +31,7 @@ import com.google.android.gms.location.LocationServices;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
@@ -62,6 +61,10 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
         lblLongtitudeValue = findViewById(R.id.lblLongtitudeValue);
         lblLangtitudeValue = findViewById(R.id.lblLatitudeValue);
 
+        //getPlantNames for our autocompletetextview, the result that is showing up in autocompletetext is the toString in plandto!!
+        PlantSearchTask pet=new PlantSearchTask();
+        pet.execute("");
+
         //for gpslocation, need to implementgoogleapiclient.connectioncallbacks and googleapiclient.onconnetionfailedlistener , tell us if connection suspended or fail
         googleApiClient=new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
 
@@ -76,6 +79,7 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
 
 
         btnPause = findViewById(R.id.buttonPause);
+
     }
 
     public void btnPauseGPSClicked(View view) {
@@ -211,4 +215,33 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
 
 
     }
+
+    //interclass for threads with asynctask, so it loads data without interrupting other actions
+    //parameter string, we search in plant name, progress we want to show process comlete, so also integer and list of plants for the result
+    class PlantSearchTask extends AsyncTask<String, Integer, List<PlantDTO>> {
+        //when thread is finished, get the return of doinBackground-thread and has access to items in userinterface bacause its running ui-thread
+        @Override
+        protected void onPostExecute(List<PlantDTO> plantDTOS) {
+            super.onPostExecute(plantDTOS);
+            //set adapter, how it should show results, each plant in one row ->simplelistitem 1
+            ArrayAdapter<PlantDTO>plantAdapter=new ArrayAdapter<PlantDTO>(GPSAplant.this.getApplicationContext(),android.R.layout.simple_list_item_1,plantDTOS);
+            //adapter takes collection of data
+            actPlantName.setAdapter(plantAdapter);
+        }
+
+        //knows that its going to be string parameter because we said above in generic identifier
+        @Override
+        protected List<PlantDTO> doInBackground(String... strings) {
+            //we use plandaostub, because plantdao is not ready yet
+            IPlantDAO plantDAO=new PlantDAOStub();
+
+            //strings[] dots aufter string means he can put mor than on string for parameter
+            return plantDAO.fetchPlants(strings[0]);
+        }
+    }
+
+
+
+
+
 }

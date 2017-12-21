@@ -10,7 +10,7 @@ import java.util.List;
  * Simulate network
  */
 
-public class PlantDAOStube implements IPlantDAO {
+public class PlantDAOStub implements IPlantDAO {
     @Override
     public List<PlantDTO> fetchPlants(String searchTerm){
 
@@ -21,6 +21,7 @@ public class PlantDAOStube implements IPlantDAO {
         PlantDTO easternRedbud=new PlantDTO();
         easternRedbud.setGenus("Cercis");
         easternRedbud.setSpecies("canadensis");
+        easternRedbud.setCultivar("");
         easternRedbud.setCommon("Eastern Rebud");
 
         allPlants.add(easternRedbud);
@@ -28,6 +29,7 @@ public class PlantDAOStube implements IPlantDAO {
         PlantDTO chineseRedbud =new PlantDTO();
         chineseRedbud.setGenus("Cercis");
         chineseRedbud.setSpecies("Chinensis");
+        chineseRedbud.setCultivar("");
         chineseRedbud.setCommon("Chinese Redbud");
 
         allPlants.add(chineseRedbud);

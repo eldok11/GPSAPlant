@@ -129,7 +129,11 @@
         android:layout_alignBaseline="@+id/lblPlantName"
         android:layout_alignBottom="@+id/lblPlantName"
         android:layout_alignLeft="@+id/actLocation"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/actLocation"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:popupBackground="@color/colorPrimaryDark"
         android:text="@string/lblBlank" />
 
     <AutoCompleteTextView
@@ -139,7 +143,10 @@
         android:layout_alignBaseline="@+id/lblLocation"
         android:layout_alignBottom="@+id/lblLocation"
         android:layout_alignLeft="@+id/lblLongtitudeValue"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/lblLongtitudeValue"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:text="@string/lblBlank" />
 
     <AutoCompleteTextView
@@ -149,7 +156,11 @@
         android:layout_alignBaseline="@+id/lblDescription"
         android:layout_alignBottom="@+id/lblDescription"
         android:layout_alignLeft="@+id/actLocation"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/actLocation"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:popupBackground="@color/colorPrimaryDark"
         android:text="@string/lblBlank" />
 
     <LinearLayout

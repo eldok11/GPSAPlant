@@ -8,6 +8,6 @@ import java.util.List;
  * Created by Georg on 21.12.2017.
  */
 
-interface IPlantDAO {
+public interface IPlantDAO {
     List<PlantDTO> fetchPlants(String searchTerm);
 }
