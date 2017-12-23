@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.georg.DAO.IPlantDAO;
+import com.example.georg.DAO.PlantDAO;
 import com.example.georg.DAO.PlantDAOStub;
 import com.example.georg.DTO.PlantDTO;
 import com.google.android.gms.common.ConnectionResult;
@@ -63,7 +64,7 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
 
         //getPlantNames for our autocompletetextview, the result that is showing up in autocompletetext is the toString in plandto!!
         PlantSearchTask pet=new PlantSearchTask();
-        pet.execute("");
+        pet.execute("redbud");
 
         //for gpslocation, need to implementgoogleapiclient.connectioncallbacks and googleapiclient.onconnetionfailedlistener , tell us if connection suspended or fail
         googleApiClient=new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
@@ -232,8 +233,9 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
         //knows that its going to be string parameter because we said above in generic identifier
         @Override
         protected List<PlantDTO> doInBackground(String... strings) {
+
             //we use plandaostub, because plantdao is not ready yet
-            IPlantDAO plantDAO=new PlantDAOStub();
+            IPlantDAO plantDAO=new PlantDAO();
 
             //strings[] dots aufter string means he can put mor than on string for parameter
             return plantDAO.fetchPlants(strings[0]);

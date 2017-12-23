@@ -31,7 +31,7 @@ public class NetworkDAO {
             InputStream in=new BufferedInputStream(urlConnection.getInputStream());
             BufferedReader bin=new BufferedReader(new InputStreamReader(in));
             String inputline;
-            while((inputline=bin.readLine())!=null){
+            while((inputline=bin.readLine()) != null){
                 sb.append(inputline);
             }
 
