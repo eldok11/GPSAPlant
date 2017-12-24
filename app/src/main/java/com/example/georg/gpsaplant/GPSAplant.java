@@ -29,8 +29,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.json.JSONException;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -238,7 +241,13 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
             IPlantDAO plantDAO=new PlantDAO();
 
             //strings[] dots aufter string means he can put mor than on string for parameter
-            return plantDAO.fetchPlants(strings[0]);
+
+            try {
+                return plantDAO.fetchPlants(strings[0]);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+                return null;
         }
     }
 

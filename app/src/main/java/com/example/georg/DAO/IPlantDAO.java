@@ -2,6 +2,8 @@ package com.example.georg.DAO;
 
 import com.example.georg.DTO.PlantDTO;
 
+import org.json.JSONException;
+
 import java.util.List;
 
 /**
@@ -9,5 +11,5 @@ import java.util.List;
  */
 
 public interface IPlantDAO {
-    List<PlantDTO> fetchPlants(String searchTerm);
+    List<PlantDTO> fetchPlants(String searchTerm) throws JSONException;
 }
