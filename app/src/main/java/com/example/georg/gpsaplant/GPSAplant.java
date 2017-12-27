@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.georg.DAO.IOfflinePlantDAO;
 import com.example.georg.DAO.IPlantDAO;
+import com.example.georg.DAO.OfflinePlantDAO;
 import com.example.georg.DAO.PlantDAO;
 import com.example.georg.DAO.PlantDAOStub;
 import com.example.georg.DTO.PlantDTO;
@@ -36,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,LocationListener {
 
@@ -236,19 +239,39 @@ public class GPSAplant extends PlantPlaecesActivity implements GoogleApiClient.C
         //knows that its going to be string parameter because we said above in generic identifier
         @Override
         protected List<PlantDTO> doInBackground(String... strings) {
+            //to exception return new arraylist
+            List<PlantDTO> allPlants=new ArrayList<PlantDTO>();
 
             //we use plandaostub, because plantdao is not ready yet
             IPlantDAO plantDAO=new PlantDAO();
-
+            IOfflinePlantDAO offlinePlantDAO=new OfflinePlantDAO(GPSAplant.this);
+            int countPlants = offlinePlantDAO.countPlants();
+            //we know that there are 3000 plants, so if less than 1000, we have to take them to save them locally
+            if(countPlants<1000){
             //strings[] dots aufter string means he can put mor than on string for parameter
 
             try {
-                return plantDAO.fetchPlants(strings[0]);
+                allPlants= plantDAO.fetchPlants(strings[0]);
+                Set<Integer> localGUIDs = offlinePlantDAO.fetchAllGuids();
+
+
+
+                //iterae over all plantes we fetched, and place them into the local database
+                for (PlantDTO plant : allPlants) {
+                    //check, do we have this gui in our guis, if we do dont insert it again
+                    if(plant.getGuid() > 0 && !localGUIDs.contains(Integer.valueOf(plant.getGuid()))){
+                    //insert into the database,
+                        offlinePlantDAO.insert(plant);
+                    }
+
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-                return null;
+
         }
+            return allPlants;
+    }
     }
 
 

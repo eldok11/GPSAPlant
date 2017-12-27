@@ -46,7 +46,7 @@ public class PlantDTO {
         this.common = common;
     }
 
-    int guid;//global identifier
+    public int guid;//global identifier
 
     public long getCacheID() {
         return cacheID;
