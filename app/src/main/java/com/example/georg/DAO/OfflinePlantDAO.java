@@ -94,4 +94,18 @@ public class OfflinePlantDAO extends SQLiteOpenHelper implements IPlantDAO{
         return allGuids;
 
     }
+    public int countPlants(){
+        int plantCount=0;
+        String sql="SELECT COUNT(*) FROM"+PLANTS;
+        Cursor cursor = getReadableDatabase().rawQuery(sql, null);
+        //did we get result?
+        if(cursor.getCount()>0){
+            cursor.moveToFirst():
+            plantCount=cursor.getInt(0);//columnidenx 0, because only 1 column
+
+        }
+        cursor.close();
+        return plantCount;
+
+    }
 }
