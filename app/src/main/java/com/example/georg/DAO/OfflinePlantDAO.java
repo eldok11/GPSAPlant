@@ -16,6 +16,14 @@ import java.util.List;
 
 public class OfflinePlantDAO extends SQLiteOpenHelper implements IPlantDAO{
 
+    public static final String PLANTS = "PLANTS";
+    public static final String CACHE_ID = "CACHE_ID";
+    public static final String GENUS = "GENUS";
+    public static final String SPECIES = "SPECIES";
+    public static final String GUID = "GUID";
+    public static final String CULTIVAR = "CULTIVAR";
+    public static final String COMMON = "COMMON";
+
     //there is no default-constructor in sqlite
     public OfflinePlantDAO(Context ctx){
         super(ctx,"plantplaces.db",null,1);
@@ -24,6 +32,11 @@ public class OfflinePlantDAO extends SQLiteOpenHelper implements IPlantDAO{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        String createPlants= "CREATE TABLE "+ PLANTS +" ("+ CACHE_ID +"INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                GUID+" INTEGER, "+GENUS+" TEXT, "+ SPECIES+" TEXT, "+CULTIVAR+" TEXT, "+ COMMON+" TEXT "+");";
+                db.execSQL(createPlants);
+
 
     }
 
