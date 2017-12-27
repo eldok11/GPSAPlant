@@ -2,6 +2,7 @@ package com.example.georg.DAO;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -9,7 +10,9 @@ import com.example.georg.DTO.PlantDTO;
 
 import org.json.JSONException;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Georg on 24.12.2017.
@@ -64,5 +67,31 @@ public class OfflinePlantDAO extends SQLiteOpenHelper implements IPlantDAO{
         //store our cache ID in our DTO
         plant.setCacheID(cacheID);
     }
+    public Set<Integer> fetchAllGuids(){
+      //declare return type
+        Set<Integer> allGuids=new HashSet<Integer>();
+        //SQL statement
+        String sql="SELECT"+GUID+" FROM" +PLANTS;
+        //run the query
 
+        Cursor cursor=getReadableDatabase().rawQuery(sql,null);
+        //did we get results?
+        if(cursor.getCount()>0){
+            //move to the first result
+            cursor.moveToFirst();
+
+            while(!cursor.isAfterLast()){
+                //instead of cursor.getColumnIndex(GUID) we could say 0, because there is only one columen
+                int guid=cursor.getInt(cursor.getColumnIndex(GUID));
+                //add guid to our set of guids.
+                allGuids.add(Integer.valueOf(guid));
+                //go to next
+                cursor.moveToNext();
+            }
+
+        }
+        cursor.close();
+        return allGuids;
+
+    }
 }
