@@ -47,6 +47,16 @@ public class PlantDTO {
     }
 
     int guid;//global identifier
+
+    public long getCacheID() {
+        return cacheID;
+    }
+
+    public void setCacheID(long cacheID) {
+        this.cacheID = cacheID;
+    }
+
+    private long cacheID;
     private String genus;
     private String species;
     private String cultivar;

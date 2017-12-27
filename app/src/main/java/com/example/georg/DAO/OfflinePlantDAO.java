@@ -1,5 +1,6 @@
 package com.example.georg.DAO;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -49,4 +50,19 @@ public class OfflinePlantDAO extends SQLiteOpenHelper implements IPlantDAO{
     public List<PlantDTO> fetchPlants(String searchTerm) throws JSONException {
         return null;
     }
+
+    public void insert(PlantDTO plant){
+        //create our content values, Das ContentValues-Objekt können wir dann in die SQLite Datenbank einfügen.
+        ContentValues cv=new ContentValues();
+        cv.put(GUID,plant.getGuid());
+        cv.put(GENUS,plant.getGenus());
+        cv.put(SPECIES,plant.getSpecies());
+        cv.put(CULTIVAR,plant.getCultivar());
+        cv.put(COMMON,plant.getCommon());
+        //insert the record into the database, returns long primary key, lets chose genus column, just to get the cacheID
+        long cacheID=getWritableDatabase().insert(PLANTS,GENUS,cv);
+        //store our cache ID in our DTO
+        plant.setCacheID(cacheID);
+    }
+
 }
